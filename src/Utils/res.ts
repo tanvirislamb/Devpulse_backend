@@ -7,3 +7,11 @@ export const response = (res: Response, success: Boolean, status: number, messag
         data: data
     })
 }
+
+export const errorResponse = (res: Response, success: Boolean, status: number, message: String, error?: any) => {
+    res.status(status).json({
+        success: success,
+        message: message,
+        error: error.message
+    })
+}
