@@ -4,7 +4,7 @@ import path from "path"
 dotenv.config({ path: path.resolve(process.cwd(), ".env") })
 
 const config = {
-    post: process.env.PORT
+    port: process.env.PORT
 }
 
 export default config

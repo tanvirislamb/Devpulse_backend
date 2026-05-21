@@ -1,12 +1,12 @@
 import express, { json } from "express"
+import { response } from "./Utils/res"
 
 const app = express()
-const port = 3000
 
 app.use(json())
 
 app.get('/', (req, res) => {
-    console.log("run")
+    response(res, true, 200, "Server is running")
 })
 
 export default app
