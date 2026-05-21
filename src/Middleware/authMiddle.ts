@@ -9,14 +9,14 @@ const authMiddle = () => {
         try {
             const token = req.headers.authorization
             if (!token) {
-                errorResponse(res, false, 401, "Unauthorized access")
+                return errorResponse(res, false, 401, "Unauthorized access")
             }
 
             const decode = jwt.verify(token as string, config.secret as string) as JwtPayload
 
             const userData = await pool.query(`SELECT * FROM users WHERE email=$1`, [decode.email])
             if (userData.rows.length === 0) {
-                errorResponse(res, false, 404, "user not found")
+                return errorResponse(res, false, 404, "user not found")
             }
 
             req.user = decode
