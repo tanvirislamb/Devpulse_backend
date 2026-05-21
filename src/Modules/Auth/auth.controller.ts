@@ -17,10 +17,10 @@ const createUser = async (req: Request, res: Response) => {
 //user log in
 const logInUser = async (req: Request, res: Response) => {
     try {
-        const result = await authService.createUserInDb(req.body)
-        response(res, true, 200, "User registered successfully", result)
+        const result = await authService.logInToDB(req.body)
+        response(res, true, 200, "Login successfully", result)
     } catch (error) {
-        errorResponse(res, false, 500, "Signup failed", error)
+        errorResponse(res, false, 500, "Login failed", error)
     }
 }
 
