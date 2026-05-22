@@ -20,9 +20,10 @@ const insertIssuesInDB = async (payload: IIssues, token: string) => {
 
 
 // get all issues from db
-const getAllIssuesFromDB = async () => {
+const getAllIssuesFromDB = async (sort: string = 'newest') => {
+    const orderBy = sort === 'oldest' ? 'ASC' : 'DESC'
 
-    const rawIssues = await pool.query(`SELECT * FROM issues`)
+    const rawIssues = await pool.query(`SELECT * FROM issues ORDER BY created_at ${orderBy}`)
     const issues = rawIssues.rows
 
     const reporterIds = [...new Set(issues.map(issue => issue.reporter_id))]

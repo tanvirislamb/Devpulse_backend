@@ -16,7 +16,8 @@ const createIssues = async (req: Request, res: Response) => {
 //get all issues
 const getAllIssues = async (req: Request, res: Response) => {
     try {
-        const result = await issuesService.getAllIssuesFromDB()
+        const sort = (req.query.sort as string) || 'newest'
+        const result = await issuesService.getAllIssuesFromDB(sort)
         response(res, true, 200, "", result)
     } catch (error) {
         errorResponse(res, false, 400, "Something went wrong", error)
