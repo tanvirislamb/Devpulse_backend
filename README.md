@@ -4,7 +4,7 @@ A modern issue tracking and management system built with TypeScript, Express.js,
 
 ## Live URL
 
-(To be added)
+https://a2devpulse.vercel.app/
 
 ---
 
@@ -64,15 +64,7 @@ A modern issue tracking and management system built with TypeScript, Express.js,
    npm install
    ```
 
-3. **Configure environment variables**
-   Create a `.env` file in the root directory:
-   ```env
-   PORT=3000
-   DB_STRING=postgresql://username:password@localhost:5432/devpulse
-   SECRET=your_jwt_secret_key
-   ```
-
-4. **Start the development server**
+3. **Start the development server**
    ```bash
    npm run dev
    ```
