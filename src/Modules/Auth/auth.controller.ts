@@ -7,7 +7,7 @@ import { authService } from "./auth.service"
 const createUser = async (req: Request, res: Response) => {
     try {
         const result = await authService.createUserInDb(req.body)
-        response(res, true, 200, "User registered successfully", result)
+        response(res, true, 201, "User registered successfully", result)
     } catch (error) {
         errorResponse(res, false, 500, "Signup failed", error)
     }
