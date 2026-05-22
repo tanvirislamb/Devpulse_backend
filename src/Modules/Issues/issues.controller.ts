@@ -2,6 +2,7 @@ import type { Request, Response } from "express";
 import { errorResponse, response } from "../../Utils/res";
 import { issuesService } from "./issues.service";
 
+// create issues
 const createIssues = async (req: Request, res: Response) => {
     try {
         const result = await issuesService.insertIssuesInDB(req.body, req.headers.authorization as string)
@@ -11,6 +12,17 @@ const createIssues = async (req: Request, res: Response) => {
     }
 }
 
+
+//get all issues
+const getAllIssues = async (req: Request, res: Response) => {
+    try {
+
+    } catch (error) {
+        errorResponse(res, false, 400, "Something went wrong", error)
+    }
+}
+
 export const issuesController = {
-    createIssues
+    createIssues,
+    getAllIssues
 }
