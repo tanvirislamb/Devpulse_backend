@@ -37,8 +37,24 @@ const getSingleIssue = async (req: Request, res: Response) => {
 
 }
 
+
+// update issue
+const updateIssue = async (req: Request, res: Response) => {
+    try {
+        const id = req.params.id as string
+        const token = req.headers.authorization as string
+
+        const result = await issuesService.updateIssueInDb(id, token, req.body)
+
+        response(res, true, 200, "Issue updated successfully", result)
+    } catch (error) {
+        errorResponse(res, false, 400, "Something went worng", error)
+    }
+}
+
 export const issuesController = {
     createIssues,
     getAllIssues,
-    getSingleIssue
+    getSingleIssue,
+    updateIssue
 }

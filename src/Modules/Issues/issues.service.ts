@@ -89,8 +89,55 @@ const getSingleIssueById = async (id: string) => {
     return formattedResult
 }
 
+
+//update issue
+const updateIssueInDb = async (id: string, token: string, payload: IIssues) => {
+    const { title, description, type } = payload
+    if (!token) {
+        throw new Error("Unauthorized access")
+    }
+
+    const decode = jwt.verify(token, config.secret as string) as JwtPayload
+
+    if (decode.role === "maintainer") {
+        const result = await pool.query(`
+            UPDATE issues 
+              SET title=$1, 
+                description=$2, 
+                type=$3, 
+                updated_at = NOW() 
+              WHERE id=$4 RETURNING *`
+            , [title, description, type, id])
+
+        if (result.rows.length === 0) {
+            throw new Error("Issues not found")
+        }
+
+        return result.rows[0]
+    }
+
+    if (decode.role === "contributor") {
+        const result = await pool.query(`
+            UPDATE issues 
+            SET title=$1, 
+                description=$2, 
+                type=$3, 
+                updated_at = NOW() 
+            WHERE id=$4 AND reporter_id=$5 AND status='open' RETURNING *`
+            , [title, description, type, id, decode.id]
+        )
+        if (result.rows.length === 0) {
+            throw new Error("Forbidden acces")
+        }
+
+        return result.rows[0]
+    }
+    throw new Error("Forbidden")
+}
+
 export const issuesService = {
     insertIssuesInDB,
     getAllIssuesFromDB,
-    getSingleIssueById
+    getSingleIssueById,
+    updateIssueInDb
 }
