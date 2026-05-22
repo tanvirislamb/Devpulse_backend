@@ -24,7 +24,21 @@ const getAllIssues = async (req: Request, res: Response) => {
     }
 }
 
+
+// get single issue by id
+const getSingleIssue = async (req: Request, res: Response) => {
+    try {
+        const id = req.params.id as string
+        const result = await issuesService.getSingleIssueById(id)
+        response(res, true, 200, "", result)
+    } catch (error) {
+        errorResponse(res, false, 400, "Something went wrong", error)
+    }
+
+}
+
 export const issuesController = {
     createIssues,
-    getAllIssues
+    getAllIssues,
+    getSingleIssue
 }

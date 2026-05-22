@@ -55,7 +55,42 @@ const getAllIssuesFromDB = async (sort: string = 'newest') => {
 
 }
 
+
+// get issue by id
+const getSingleIssueById = async (id: string) => {
+    const getIssue = await pool.query(`SELECT * FROM issues WHERE id=$1`, [id])
+
+    if (getIssue.rows.length === 0) {
+        throw new Error("Issue not found")
+    }
+
+    const issue = getIssue.rows[0]
+
+    const reporterIds = issue.reporter_id
+
+    const usersResult = await pool.query(
+        `SELECT id, name, role FROM users WHERE id = $1`,
+        [reporterIds]
+    )
+
+    const user = usersResult.rows[0]
+
+    const formattedResult = {
+        id: issue.id,
+        title: issue.title,
+        description: issue.description,
+        type: issue.type,
+        status: issue.status,
+        reporter: user,
+        created_at: issue.created_at,
+        updated_at: issue.updated_at
+    }
+
+    return formattedResult
+}
+
 export const issuesService = {
     insertIssuesInDB,
-    getAllIssuesFromDB
+    getAllIssuesFromDB,
+    getSingleIssueById
 }
