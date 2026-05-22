@@ -93,10 +93,7 @@ const getSingleIssueById = async (id: string) => {
 //update issue
 const updateIssueInDb = async (id: string, token: string, payload: IIssues) => {
     const { title, description, type } = payload
-    if (!token) {
-        throw new Error("Unauthorized access")
-    }
-
+    
     const decode = jwt.verify(token, config.secret as string) as JwtPayload
 
     if (decode.role === "maintainer") {
@@ -135,9 +132,25 @@ const updateIssueInDb = async (id: string, token: string, payload: IIssues) => {
     throw new Error("Forbidden")
 }
 
+
+const deleteIssuesFromDb = async (id: string, token: string) => {
+    const decode = jwt.verify(token, config.secret as string) as JwtPayload
+    if (decode.role === 'maintainer') {
+        const result = await pool.query(`DELETE FROM issues WHERE id=$1 RETURNING *`, [id])
+
+        if (result.rows.length === 0) {
+            throw new Error("Issues not found")
+        }
+        return result.rows[0]
+    } else {
+        throw new Error("Forbidden access")
+    }
+}
+
 export const issuesService = {
     insertIssuesInDB,
     getAllIssuesFromDB,
     getSingleIssueById,
-    updateIssueInDb
+    updateIssueInDb,
+    deleteIssuesFromDb
 }

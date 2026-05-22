@@ -12,6 +12,6 @@ export const errorResponse = (res: Response, success: Boolean, status: number, m
     res.status(status).json({
         success: success,
         message: message,
-        error: error?.message
+        error: error
     })
 }
