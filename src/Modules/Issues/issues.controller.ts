@@ -21,7 +21,10 @@ const createIssues = async (req: Request, res: Response) => {
 const getAllIssues = async (req: Request, res: Response) => {
     try {
         const sort = (req.query.sort as string) || 'newest'
-        const result = await issuesService.getAllIssuesFromDB(sort)
+        const type = req.query.type as string
+        const status = req.query.status as string
+
+        const result = await issuesService.getAllIssuesFromDB(sort, type, status)
         response(res, true, 200, "", result)
     } catch (error: any) {
         errorResponse(res, false, 400, error.message, error)

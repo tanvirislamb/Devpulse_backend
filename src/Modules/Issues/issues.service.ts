@@ -20,10 +20,29 @@ const insertIssuesInDB = async (payload: IIssues, token: string) => {
 
 
 // get all issues from db
-const getAllIssuesFromDB = async (sort: string = 'newest') => {
+const getAllIssuesFromDB = async (sort: string = 'newest', type?: string, status?: string) => {
     const orderBy = sort === 'oldest' ? 'ASC' : 'DESC'
 
-    const rawIssues = await pool.query(`SELECT * FROM issues ORDER BY created_at ${orderBy}`)
+    let whereClause = ''
+    const params: any[] = []
+
+    if (type || status) {
+        const conditions: string[] = []
+
+        if (type) {
+            conditions.push(`type = $${params.length + 1}`)
+            params.push(type)
+        }
+
+        if (status) {
+            conditions.push(`status = $${params.length + 1}`)
+            params.push(status)
+        }
+
+        whereClause = ' WHERE ' + conditions.join(' AND ')
+    }
+
+    const rawIssues = await pool.query(`SELECT * FROM issues${whereClause} ORDER BY created_at ${orderBy}`, params)
     const issues = rawIssues.rows
 
     const reporterIds = [...new Set(issues.map(issue => issue.reporter_id))]
@@ -93,7 +112,7 @@ const getSingleIssueById = async (id: string) => {
 //update issue
 const updateIssueInDb = async (id: string, token: string, payload: IIssues) => {
     const { title, description, type } = payload
-    
+
     const decode = jwt.verify(token, config.secret as string) as JwtPayload
 
     if (decode.role === "maintainer") {
