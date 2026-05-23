@@ -25,7 +25,7 @@ const getAllIssues = async (req: Request, res: Response) => {
         const status = req.query.status as string
 
         const result = await issuesService.getAllIssuesFromDB(sort, type, status)
-        response(res, true, 200, "", result)
+        response(res, true, 200, "Issue retrived successfully", result)
     } catch (error: any) {
         errorResponse(res, false, 400, error.message, error)
     }
@@ -37,7 +37,7 @@ const getSingleIssue = async (req: Request, res: Response) => {
     try {
         const id = req.params.id as string
         const result = await issuesService.getSingleIssueById(id)
-        response(res, true, 200, "", result)
+        response(res, true, 200, "Issue retrived successfully", result)
     } catch (error: any) {
         errorResponse(res, false, 400, error.message, error)
     }
