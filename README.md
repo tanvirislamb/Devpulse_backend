@@ -263,11 +263,6 @@ All API responses follow a consistent format:
 npm run dev
 ```
 
-### Test
-```bash
-npm test
-```
-
 ---
 
 ## Future Enhancements
